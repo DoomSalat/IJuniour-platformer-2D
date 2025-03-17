@@ -139,6 +139,9 @@ public class PlayerController : Movement
 
 	private bool IsGrounded()
 	{
+		if (_isJumping)
+			return false;
+
 		Collider2D[] hits = Physics2D.OverlapCircleAll(_groundCheckPoint.position, _groundCheckRadius, _groundLayer);
 
 		foreach (Collider2D hit in hits)

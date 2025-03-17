@@ -56,5 +56,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "IJuniour 2D Platformer.sln"
+	"dotnet.defaultSolution": "IJuniour 2D Platformer.sln",
+	"git.ignoreLimitWarning": true
 }
