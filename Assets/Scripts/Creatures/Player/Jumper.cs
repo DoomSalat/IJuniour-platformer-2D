@@ -37,16 +37,21 @@ public class Jumper : MonoBehaviour
 
 		foreach (Collider2D childCollider in childColliders)
 		{
-			if (childCollider != null && (_groundLayer & (1 << childCollider.gameObject.layer)) != 0)
+			if (childCollider != null && IsInGroundLayer(childCollider))
 			{
 				_selfColliders.Add(childCollider);
 			}
 		}
 
-		if (TryGetComponent<Collider2D>(out var selfCollider) && (_groundLayer & (1 << selfCollider.gameObject.layer)) != 0)
+		if (TryGetComponent<Collider2D>(out var selfCollider) && IsInGroundLayer(selfCollider))
 		{
 			_selfColliders.Add(selfCollider);
 		}
+	}
+
+	private bool IsInGroundLayer(Collider2D collider)
+	{
+		return (_groundLayer & (1 << collider.gameObject.layer)) != 0;
 	}
 
 	private bool IsSelfCollider(Collider2D collider)
