@@ -3,23 +3,18 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Collectible : MonoBehaviour
 {
-	[SerializeField] private float _delayDestroy = 1;
-
-	private bool _wasCollect;
+	private Collider2D _collider;
 
 	public event System.Action Collected;
 
-	private void OnTriggerEnter2D(Collider2D collision)
+	private void Awake()
 	{
-		if (_wasCollect)
-			return;
+		_collider = GetComponent<Collider2D>();
+	}
 
-		if (collision.TryGetComponent<ItemCollector>(out _))
-		{
-			_wasCollect = true;
-			Collected?.Invoke();
-
-			Destroy(gameObject, _delayDestroy);
-		}
+	public void Collect()
+	{
+		_collider.enabled = false;
+		Collected?.Invoke();
 	}
 }

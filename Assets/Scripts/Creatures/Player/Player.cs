@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using UniRx;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,23 +13,31 @@ public class Player : Creature
 	[Required][SerializeField] private BoxCreatureAnimator _animator;
 
 	private bool _canPressJump = true;
+	private bool _isGrounded;
 	private Vector2 _axisDirection;
+
+	protected override void Awake()
+	{
+		base.Awake();
+
+		_jumper.Grounded.Subscribe(SetGround).AddTo(this);
+	}
 
 	private void OnEnable()
 	{
-		_axisHandler.MainControls.Player.Jump.performed += JumpPerformed;
-		_axisHandler.MainControls.Player.Jump.canceled += JumpCanceled;
+		_axisHandler.MainControls.Player.Jump.performed += OnJumpPerformed;
+		_axisHandler.MainControls.Player.Jump.canceled += OnJumpCanceled;
 	}
 
 	private void OnDisable()
 	{
-		_axisHandler.MainControls.Player.Jump.performed -= JumpPerformed;
-		_axisHandler.MainControls.Player.Jump.canceled -= JumpCanceled;
+		_axisHandler.MainControls.Player.Jump.performed -= OnJumpPerformed;
+		_axisHandler.MainControls.Player.Jump.canceled -= OnJumpCanceled;
 	}
 
 	private void Update()
 	{
-		_axisDirection = _axisHandler.AxisDirection();
+		_axisDirection = _axisHandler.GetAxisDirection();
 
 		if (_axisDirection.x == 0)
 		{
@@ -39,8 +48,6 @@ public class Player : Creature
 		{
 			_animator.SetRun(true);
 		}
-
-		_animator.SetGround(_jumper.IsGrounded());
 	}
 
 	private void FixedUpdate()
@@ -58,9 +65,15 @@ public class Player : Creature
 		}
 	}
 
-	private void JumpPerformed(InputAction.CallbackContext context)
+	private void SetGround(bool isGround)
 	{
-		if (_canPressJump && _jumper.CanJump())
+		_isGrounded = isGround;
+		_animator.SetGround(_isGrounded);
+	}
+
+	private void OnJumpPerformed(InputAction.CallbackContext context)
+	{
+		if (_canPressJump && _jumper.IsGround)
 		{
 			_canPressJump = false;
 			_jumper.Jump();
@@ -68,7 +81,7 @@ public class Player : Creature
 		}
 	}
 
-	private void JumpCanceled(InputAction.CallbackContext context)
+	private void OnJumpCanceled(InputAction.CallbackContext context)
 	{
 		_canPressJump = true;
 	}

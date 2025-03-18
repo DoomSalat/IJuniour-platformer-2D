@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UniRx;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Jumper : MonoBehaviour
@@ -22,13 +22,24 @@ public class Jumper : MonoBehaviour
 	private List<Collider2D> _selfColliders = new List<Collider2D>();
 
 	private bool _isJumping = false;
-	private bool _isCanGrounded = true;
 	private float _jumpTimeCounter;
+
+	private readonly ReactiveProperty<bool> _isGrounded = new ReactiveProperty<bool>(false);
+
+	public ReadOnlyReactiveProperty<bool> Grounded { get; private set; }
+	public bool IsGround => _isGrounded.Value;
 
 	private void Awake()
 	{
 		_rigidbody = GetComponent<Rigidbody2D>();
 		InitializateSelfColliders();
+
+		Grounded = _isGrounded.ToReadOnlyReactiveProperty();
+	}
+
+	private void FixedUpdate()
+	{
+		IsGrounded();
 	}
 
 	private void InitializateSelfColliders()
@@ -66,24 +77,14 @@ public class Jumper : MonoBehaviour
 		return false;
 	}
 
-	public bool CanJump()
+	private bool IsGrounded()
 	{
-		return _isJumping == false && IsGrounded();
-	}
+		if (_isJumping)
+		{
+			_isGrounded.Value = false;
 
-	public void Jump()
-	{
-		_isJumping = true;
-		_isCanGrounded = false;
-		_jumpTimeCounter = _maxJumpTime;
-
-		_rigidbody.AddForce(Vector2.up * _jumpInitialImpulse, ForceMode2D.Impulse);
-	}
-
-	public bool IsGrounded()
-	{
-		if (_isCanGrounded == false)
 			return false;
+		}
 
 		Collider2D[] hits = Physics2D.OverlapCircleAll(_groundCheckPoint.position, _groundCheckRadius, _groundLayer);
 
@@ -91,11 +92,24 @@ public class Jumper : MonoBehaviour
 		{
 			if (hits[i] != null && IsSelfCollider(hits[i]) == false)
 			{
+				_isGrounded.Value = true;
+
 				return true;
 			}
 		}
 
+		_isGrounded.Value = false;
+
 		return false;
+	}
+
+	public void Jump()
+	{
+		_isJumping = true;
+		_isGrounded.Value = false;
+		_jumpTimeCounter = _maxJumpTime;
+
+		_rigidbody.AddForce(Vector2.up * _jumpInitialImpulse, ForceMode2D.Impulse);
 	}
 
 	public void FixedForce(bool isJumped)
@@ -123,8 +137,6 @@ public class Jumper : MonoBehaviour
 			{
 				_rigidbody.linearVelocityY += Physics2D.gravity.y * (_fallMultiplier - BaseGravityMultiplier) * Time.fixedDeltaTime;
 			}
-
-			_isCanGrounded = true;
 		}
 	}
 }

@@ -20,7 +20,7 @@ public class InputHandler : MonoBehaviour
 		MainControls.Player.Disable();
 	}
 
-	public bool CheckKeyPerformed(InputAction action)
+	public bool IsKeyPerformed(InputAction action)
 	{
 		return action.phase == InputActionPhase.Performed;
 	}

@@ -4,8 +4,10 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Coin : MonoBehaviour
 {
-	[Required][SerializeField] private Collectible _coin;
+	[Required][SerializeField] private Collectible _collectible;
 	[SerializeField] private string _animTriggerDisappear = "Disappear";
+	[Space]
+	[SerializeField] private float _delayDestroy = 1;
 
 	private Animator _animator;
 
@@ -16,16 +18,18 @@ public class Coin : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_coin.Collected += Collect;
+		_collectible.Collected += Collect;
 	}
 
 	private void OnDisable()
 	{
-		_coin.Collected -= Collect;
+		_collectible.Collected -= Collect;
 	}
 
 	private void Collect()
 	{
 		_animator.SetTrigger(_animTriggerDisappear);
+
+		Destroy(gameObject, _delayDestroy);
 	}
 }

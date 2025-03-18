@@ -7,7 +7,7 @@ public class AxisHandler : InputHandler
 
 	private Vector2 _savedDirection;
 
-	public Vector2 AxisDirection()
+	public Vector2 GetAxisDirection()
 	{
 		Vector2 joystickDirection = MainControls.Player.Move.ReadValue<Vector2>();
 
@@ -16,23 +16,23 @@ public class AxisHandler : InputHandler
 			return joystickDirection;
 		}
 
-		bool upBoard = CheckKeyPerformed(MainControls.Player.Up);
-		bool downBoard = CheckKeyPerformed(MainControls.Player.Down);
-		bool leftBoard = CheckKeyPerformed(MainControls.Player.Left);
-		bool rightBoard = CheckKeyPerformed(MainControls.Player.Right);
+		bool isUpBoard = IsKeyPerformed(MainControls.Player.Up);
+		bool isDownBoard = IsKeyPerformed(MainControls.Player.Down);
+		bool isLeftBoard = IsKeyPerformed(MainControls.Player.Left);
+		bool isRightBoard = IsKeyPerformed(MainControls.Player.Right);
 
-		float verticalMove = CalculateVerticalMove(upBoard, downBoard);
-		float horizontalMove = CalculateHorizontalMove(leftBoard, rightBoard);
+		float verticalMove = CalculateVerticalMove(isUpBoard, isDownBoard);
+		float horizontalMove = CalculateHorizontalMove(isLeftBoard, isRightBoard);
 		_savedDirection = new Vector2(horizontalMove, verticalMove);
 
 		return _savedDirection;
 	}
 
-	private float CalculateVerticalMove(bool upBoard, bool downBoard)
+	private float CalculateVerticalMove(bool isUpBoard, bool isDownBoard)
 	{
 		float verticalMove = 0f;
 
-		if (upBoard && downBoard)
+		if (isUpBoard && isDownBoard)
 		{
 			verticalMove = _savedDirection.y;
 
@@ -46,11 +46,11 @@ public class AxisHandler : InputHandler
 		{
 			_reverseInputVertical = false;
 
-			if (upBoard)
+			if (isUpBoard)
 			{
 				verticalMove = 1f;
 			}
-			else if (downBoard)
+			else if (isDownBoard)
 			{
 				verticalMove = -1f;
 			}
@@ -59,11 +59,11 @@ public class AxisHandler : InputHandler
 		return verticalMove;
 	}
 
-	private float CalculateHorizontalMove(bool leftBoard, bool rightBoard)
+	private float CalculateHorizontalMove(bool isLeftBoard, bool isRightBoard)
 	{
 		float horizontalMove = 0f;
 
-		if (leftBoard && rightBoard)
+		if (isLeftBoard && isRightBoard)
 		{
 			horizontalMove = _savedDirection.x;
 
@@ -77,11 +77,11 @@ public class AxisHandler : InputHandler
 		{
 			_reverseInputHorizontal = false;
 
-			if (rightBoard)
+			if (isRightBoard)
 			{
 				horizontalMove = 1f;
 			}
-			else if (leftBoard)
+			else if (isLeftBoard)
 			{
 				horizontalMove = -1f;
 			}
