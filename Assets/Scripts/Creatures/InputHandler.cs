@@ -1,34 +1,23 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputHandler : Creature
+public class InputHandler : MonoBehaviour
 {
-	protected MainControls _mainControls;
+	public MainControls MainControls { get; private set; }
 
-	protected override void Awake()
+	private void Awake()
 	{
-		base.Awake();
-		_mainControls = new MainControls();
+		MainControls = new MainControls();
 	}
 
-	protected virtual void OnEnable()
+	private void OnEnable()
 	{
-		EnableInput();
+		MainControls.Player.Enable();
 	}
 
-	protected virtual void OnDisable()
+	private void OnDisable()
 	{
-		DisableInput();
-	}
-
-	public void EnableInput()
-	{
-		_mainControls.Player.Enable();
-	}
-
-	public void DisableInput()
-	{
-		_mainControls.Player.Disable();
+		MainControls.Player.Disable();
 	}
 
 	public bool CheckKeyPerformed(InputAction action)

@@ -1,9 +1,8 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Collector : MonoBehaviour
+public class Collectible : MonoBehaviour
 {
-	[SerializeField] private string _collectorTag = "Player";
 	[SerializeField] private float _delayDestroy = 1;
 
 	private bool _wasCollect;
@@ -15,7 +14,7 @@ public class Collector : MonoBehaviour
 		if (_wasCollect)
 			return;
 
-		if (collision.CompareTag(_collectorTag))
+		if (collision.TryGetComponent<ItemCollector>(out _))
 		{
 			_wasCollect = true;
 			Collected?.Invoke();

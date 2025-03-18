@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8491643983482756984}
   - component: {fileID: 3523070864802232455}
   - component: {fileID: 2447629994022701211}
+  - component: {fileID: 5065248170260031062}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -153,7 +154,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00f9c5bb12f0a804b89800f80af5d29f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speedIdle: 3
+  _mover: {fileID: 5065248170260031062}
+  _boxAnimator: {fileID: 3961425130907206874}
   _speedChase: 5
   _waitTime: 3
   _obstacleLayer:
@@ -163,8 +165,19 @@ MonoBehaviour:
   _obstacleCheck: {fileID: 2254065921301566197}
   _checkDistanceObstacle: 1
   _checkDistanceGround: 0.1
-  _animator: {fileID: 7736721453729390775}
-  _animBool_Run: Run
+--- !u!114 &5065248170260031062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4656465008082454000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cbaff9c3e54de4448085ff74eb5e5df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 5
 --- !u!1 &4819159276567110353
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,13 +274,19 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4025c7c2244f11b4fb00d1d4b367e2de, type: 3}
+--- !u!114 &3961425130907206874 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1157215907024747114, guid: 4025c7c2244f11b4fb00d1d4b367e2de, type: 3}
+  m_PrefabInstance: {fileID: 2807588199027949232}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22b5209017904f340b6b64124bcbbd7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5027816751957652292 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7147470057408433652, guid: 4025c7c2244f11b4fb00d1d4b367e2de, type: 3}
-  m_PrefabInstance: {fileID: 2807588199027949232}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7736721453729390775 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5595957543274585607, guid: 4025c7c2244f11b4fb00d1d4b367e2de, type: 3}
   m_PrefabInstance: {fileID: 2807588199027949232}
   m_PrefabAsset: {fileID: 0}

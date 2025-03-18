@@ -4,8 +4,8 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Coin : MonoBehaviour
 {
-	[Required][SerializeField] private Collector _coin;
-	[SerializeField] private string animTrigger_Disappear = "Disappear";
+	[Required][SerializeField] private Collectible _coin;
+	[SerializeField] private string _animTriggerDisappear = "Disappear";
 
 	private Animator _animator;
 
@@ -26,6 +26,6 @@ public class Coin : MonoBehaviour
 
 	private void Collect()
 	{
-		_animator.SetTrigger(animTrigger_Disappear);
+		_animator.SetTrigger(_animTriggerDisappear);
 	}
 }

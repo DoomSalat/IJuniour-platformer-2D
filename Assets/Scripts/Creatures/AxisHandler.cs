@@ -1,25 +1,25 @@
 using UnityEngine;
 
-public class Movement : InputHandler
+public class AxisHandler : InputHandler
 {
 	private bool _reverseInputHorizontal = false;
 	private bool _reverseInputVertical = false;
 
 	private Vector2 _savedDirection;
 
-	public Vector2 AxisMove()
+	public Vector2 AxisDirection()
 	{
-		Vector2 joystickDirection = _mainControls.Player.Move.ReadValue<Vector2>();
+		Vector2 joystickDirection = MainControls.Player.Move.ReadValue<Vector2>();
 
 		if (joystickDirection.magnitude > 0)
 		{
 			return joystickDirection;
 		}
 
-		bool upBoard = CheckKeyPerformed(_mainControls.Player.Up);
-		bool downBoard = CheckKeyPerformed(_mainControls.Player.Down);
-		bool leftBoard = CheckKeyPerformed(_mainControls.Player.Left);
-		bool rightBoard = CheckKeyPerformed(_mainControls.Player.Right);
+		bool upBoard = CheckKeyPerformed(MainControls.Player.Up);
+		bool downBoard = CheckKeyPerformed(MainControls.Player.Down);
+		bool leftBoard = CheckKeyPerformed(MainControls.Player.Left);
+		bool rightBoard = CheckKeyPerformed(MainControls.Player.Right);
 
 		float verticalMove = CalculateVerticalMove(upBoard, downBoard);
 		float horizontalMove = CalculateHorizontalMove(leftBoard, rightBoard);

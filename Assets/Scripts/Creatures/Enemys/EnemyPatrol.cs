@@ -4,8 +4,13 @@ using Sirenix.OdinInspector;
 
 public class EnemyPatrol : Enemy
 {
-	[SerializeField][Min(0)] private float _speedIdle = 5;
-	[SerializeField][Min(0)] private float _speedChase = 8;
+	private const int RightDirection = 1;
+	private const int LeftDirection = -1;
+
+	[Required][SerializeField] private Mover _mover;
+	[Required][SerializeField] private BoxCreatureAnimator _boxAnimator;
+
+	[SerializeField][Min(0)] private float _speedChaseMultiplier = 1.2f;
 	[SerializeField][Min(0)] private float _waitTime = 2f;
 
 	[FoldoutGroup("Vision")]
@@ -15,11 +20,6 @@ public class EnemyPatrol : Enemy
 	[FoldoutGroup("Vision")][SerializeField] private float _checkDistanceObstacle = 1f;
 	[FoldoutGroup("Vision")][SerializeField] private float _checkDistanceGround = 0.1f;
 
-	[FoldoutGroup("Animations")]
-	[Required][SerializeField] private Animator _animator;
-	[Space]
-	[FoldoutGroup("Animations")][SerializeField] private string _animBool_Run = "Run";
-
 	private PatrolState _patrolState = PatrolState.Walk;
 	private bool _walkRight = true;
 
@@ -27,7 +27,7 @@ public class EnemyPatrol : Enemy
 	{
 		if (_patrolState == PatrolState.Walk)
 		{
-			_animator.SetBool(_animBool_Run, true);
+			_boxAnimator.SetRun(true);
 			Patrol();
 		}
 	}
@@ -52,25 +52,25 @@ public class EnemyPatrol : Enemy
 
 	private void Patrol()
 	{
-		float speed = _walkRight ? _speedIdle : -_speedIdle;
-		_rigidbody.linearVelocityX = speed;
+		_mover.FixedMove(_walkRight ? RightDirection : LeftDirection);
 
 		if (CheckObstacle() || CheckGround() == false)
 		{
-			_rigidbody.linearVelocityX = 0;
+			_mover.StopMove();
 			_patrolState = PatrolState.Idle;
+
 			StartCoroutine(WaitAndTurn());
 		}
 	}
 
 	private IEnumerator WaitAndTurn()
 	{
-		_animator.SetBool(_animBool_Run, false);
+		_boxAnimator.SetRun(false);
+
 		yield return new WaitForSeconds(_waitTime);
 
 		_walkRight = !_walkRight;
 		_patrolState = PatrolState.Walk;
-		_animator.SetBool(_animBool_Run, true);
 	}
 
 	private bool CheckObstacle()
