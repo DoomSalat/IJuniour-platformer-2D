@@ -4,7 +4,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Coin : MonoBehaviour
 {
-	[Required][SerializeField] private Collectible _collectible;
+	[Required][SerializeField] private Collectable _collectible;
 	[SerializeField] private string _animTriggerDisappear = "Disappear";
 	[Space]
 	[SerializeField] private float _delayDestroy = 1;

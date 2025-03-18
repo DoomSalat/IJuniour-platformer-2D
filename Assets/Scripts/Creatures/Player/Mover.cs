@@ -20,7 +20,7 @@ public class Mover : MonoBehaviour
 		_rigidbody.linearVelocityX = 0;
 	}
 
-	public void FixedMove(float directionX, float multiplier = 1)
+	public void Move(float directionX, float multiplier = 1)
 	{
 		directionX = Mathf.Clamp(directionX, LeftDirection, RightDirection);
 		_rigidbody.linearVelocityX = directionX * multiplier * _speed;

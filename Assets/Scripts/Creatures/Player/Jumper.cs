@@ -21,6 +21,9 @@ public class Jumper : MonoBehaviour
 	private Rigidbody2D _rigidbody;
 	private List<Collider2D> _selfColliders = new List<Collider2D>();
 
+	private Collider2D[] _hits;
+	private int _maxHits = 10;
+
 	private bool _isJumping = false;
 	private float _jumpTimeCounter;
 
@@ -33,10 +36,12 @@ public class Jumper : MonoBehaviour
 	{
 		_rigidbody = GetComponent<Rigidbody2D>();
 		InitializateSelfColliders();
+		_hits = new Collider2D[_maxHits];
 
 		Grounded = _isGrounded.ToReadOnlyReactiveProperty();
 	}
 
+	[System.Obsolete]
 	private void FixedUpdate()
 	{
 		IsGrounded();
@@ -77,6 +82,7 @@ public class Jumper : MonoBehaviour
 		return false;
 	}
 
+	[System.Obsolete]
 	private bool IsGrounded()
 	{
 		if (_isJumping)
@@ -86,11 +92,11 @@ public class Jumper : MonoBehaviour
 			return false;
 		}
 
-		Collider2D[] hits = Physics2D.OverlapCircleAll(_groundCheckPoint.position, _groundCheckRadius, _groundLayer);
+		int hitCount = Physics2D.OverlapCircleNonAlloc(_groundCheckPoint.position, _groundCheckRadius, _hits, _groundLayer);
 
-		for (int i = 0; i < hits.Length; i++)
+		for (int i = 0; i < hitCount; i++)
 		{
-			if (hits[i] != null && IsSelfCollider(hits[i]) == false)
+			if (IsSelfCollider(_hits[i]) == false)
 			{
 				_isGrounded.Value = true;
 

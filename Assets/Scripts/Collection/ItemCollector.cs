@@ -5,7 +5,7 @@ public class ItemCollector : MonoBehaviour
 {
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
-		if (collision.TryGetComponent<Collectible>(out var item))
+		if (collision.TryGetComponent<Collectable>(out var item))
 		{
 			item.Collect();
 		}

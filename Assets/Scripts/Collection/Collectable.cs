@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider2D))]
-public class Collectible : MonoBehaviour
+public class Collectable : MonoBehaviour
 {
 	private Collider2D _collider;
 

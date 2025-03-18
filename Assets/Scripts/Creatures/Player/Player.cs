@@ -52,7 +52,7 @@ public class Player : Creature
 
 	private void FixedUpdate()
 	{
-		_mover.FixedMove(_axisDirection.x);
+		_mover.Move(_axisDirection.x);
 		_jumper.FixedForce(_axisDirection.y > 0);
 
 		if (_rigidbody.linearVelocityY < -VelocityZeroOffset)
@@ -77,7 +77,7 @@ public class Player : Creature
 		{
 			_canPressJump = false;
 			_jumper.Jump();
-			_animator.Jump();
+			_animator.PlayJump();
 		}
 	}
 

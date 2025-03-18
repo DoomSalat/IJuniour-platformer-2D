@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Sirenix.OdinInspector;
 
-public class EnemyPatrol : Enemy
+public class Patroller : Creature
 {
 	private const int RightDirection = 1;
 	private const int LeftDirection = -1;
@@ -52,9 +52,9 @@ public class EnemyPatrol : Enemy
 
 	private void Patrol()
 	{
-		_mover.FixedMove(_walkRight ? RightDirection : LeftDirection);
+		_mover.Move(_walkRight ? RightDirection : LeftDirection);
 
-		if (CheckObstacle() || CheckGround() == false)
+		if (HasObstacleInFront() || IsGroundBelow() == false)
 		{
 			_mover.StopMove();
 			_patrolState = PatrolState.Idle;
@@ -73,7 +73,7 @@ public class EnemyPatrol : Enemy
 		_patrolState = PatrolState.Walk;
 	}
 
-	private bool CheckObstacle()
+	private bool HasObstacleInFront()
 	{
 		Vector2 direction = _walkRight ? Vector2.right : Vector2.left;
 		RaycastHit2D hit = Physics2D.Raycast(_obstacleCheck.position, direction, _checkDistanceObstacle, _obstacleLayer);
@@ -81,7 +81,7 @@ public class EnemyPatrol : Enemy
 		return hit.collider != null;
 	}
 
-	private bool CheckGround()
+	private bool IsGroundBelow()
 	{
 		Vector2 checkPosition = _groundCheck.position + (_walkRight ? Vector3.right : Vector3.left) * _checkDistanceObstacle;
 		RaycastHit2D hit = Physics2D.Raycast(checkPosition, Vector2.down, _checkDistanceGround, _obstacleLayer);
