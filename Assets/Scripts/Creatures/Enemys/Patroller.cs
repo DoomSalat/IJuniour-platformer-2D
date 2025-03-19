@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using Sirenix.OdinInspector;
 
-public class Patroller : Creature
+public class Patroller : MonoBehaviour
 {
 	private const int RightDirection = 1;
 	private const int LeftDirection = -1;

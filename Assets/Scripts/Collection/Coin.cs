@@ -5,7 +5,6 @@ using UnityEngine;
 public class Coin : MonoBehaviour
 {
 	[Required][SerializeField] private Collectable _collectible;
-	[SerializeField] private string _animTriggerDisappear = "Disappear";
 	[Space]
 	[SerializeField] private float _delayDestroy = 1;
 
@@ -28,7 +27,7 @@ public class Coin : MonoBehaviour
 
 	private void Collect()
 	{
-		_animator.SetTrigger(_animTriggerDisappear);
+		_animator.SetTrigger(CollectableAnimatorData.Params.Disappear);
 
 		Destroy(gameObject, _delayDestroy);
 	}
