@@ -30,4 +30,9 @@ public class BoxCreatureAnimator : MonoBehaviour
 		_animator.SetTrigger(BoxCreatureAnimatorData.Params.Jump);
 		SetGround(false);
 	}
+
+	public void PlayDead()
+	{
+		_animator.SetTrigger(BoxCreatureAnimatorData.Params.Dead);
+	}
 }

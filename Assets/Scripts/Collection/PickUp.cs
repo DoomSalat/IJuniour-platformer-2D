@@ -2,7 +2,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class Coin : MonoBehaviour
+public class PickUp : MonoBehaviour
 {
 	[Required][SerializeField] private Collectable _collectible;
 	[Space]
@@ -25,7 +25,7 @@ public class Coin : MonoBehaviour
 		_collectible.Collected -= Collect;
 	}
 
-	private void Collect()
+	protected virtual void Collect(Creature collecter)
 	{
 		_animator.SetTrigger(CollectableAnimatorData.Params.Disappear);
 
