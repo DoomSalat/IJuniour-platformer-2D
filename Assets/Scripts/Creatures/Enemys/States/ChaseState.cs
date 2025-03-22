@@ -12,18 +12,21 @@ namespace EnemyState
 		private Mover _mover;
 		private Vision _vision;
 		private BoxCreatureAnimator _animator;
+		private IEnumerator _chaseCoroutine;
 
 		private Coroutine _ceaseRoutine;
-		private float _delayCease = 2f;
 
-		private float _chaseMultiplier = 2f;
+		private float _chaseSpeedMultiplier;
 
-		public ChaseState(Enemy enemy, Mover mover, Vision vision, BoxCreatureAnimator animator)
+		public ChaseState(Enemy enemy, Mover mover, Vision vision, BoxCreatureAnimator animator, IEnumerator chaseCoroutine, float chaseMultiplier)
 		{
 			_enemy = enemy;
 			_mover = mover;
 			_vision = vision;
 			_animator = animator;
+			_chaseCoroutine = chaseCoroutine;
+
+			_chaseSpeedMultiplier = chaseMultiplier;
 		}
 
 		public void Enter()
@@ -36,7 +39,7 @@ namespace EnemyState
 
 		public void FixedUpdate()
 		{
-			_mover.Move(_vision.LookRight ? RightDirection : LeftDirection, _chaseMultiplier);
+			_mover.Move(_vision.LookRight ? RightDirection : LeftDirection, _chaseSpeedMultiplier);
 
 			LookTarget();
 
@@ -59,20 +62,13 @@ namespace EnemyState
 		{
 			if (_vision.IsTargetBelow() == false && _ceaseRoutine == null)
 			{
-				_ceaseRoutine = _enemy.StartCoroutine(СeaseChase());
+				_ceaseRoutine = _enemy.StartCoroutine(_chaseCoroutine);
 			}
 			else if (_vision.IsTargetBelow() && _ceaseRoutine != null)
 			{
 				_enemy.StopCoroutine(_ceaseRoutine);
 				_ceaseRoutine = null;
 			}
-		}
-
-		private IEnumerator СeaseChase()
-		{
-			yield return new WaitForSeconds(_delayCease);
-
-			_enemy.SetStatePatrol();
 		}
 	}
 }

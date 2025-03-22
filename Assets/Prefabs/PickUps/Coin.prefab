@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _collectible: {fileID: 6911328785589356100}
-  _animTriggerDisappear: Disappear
+  _delayDestroy: 1
 --- !u!1 &6795699500750737718
 GameObject:
   m_ObjectHideFlags: 0
@@ -207,4 +207,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0afc75aaaeaefdc479cbab2a871f5e2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _delayDestroy: 1
+  _pickUp: {fileID: 3829392496697467611}

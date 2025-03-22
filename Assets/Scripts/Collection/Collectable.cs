@@ -3,18 +3,20 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Collectable : MonoBehaviour
 {
-	private Collider2D _collider;
+	[SerializeField] private PickUp _pickUp;
 
-	public event System.Action<Creature> Collected;
+	private Collider2D _collider;
 
 	private void Awake()
 	{
 		_collider = GetComponent<Collider2D>();
 	}
 
-	public void Collect(Creature collecter)
+	public void Collect(GameObject collecter)
 	{
 		_collider.enabled = false;
-		Collected?.Invoke(collecter);
+
+		if (_pickUp != null)
+			_pickUp.OnCollected(collecter);
 	}
 }

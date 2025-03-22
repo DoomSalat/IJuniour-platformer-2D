@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28325c45bb6fa7049985c9a357132f23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collecter: {fileID: 6144372614685330839}
+  _collecter: {fileID: 8461052420268681917}
 --- !u!1 &5908620673121364055
 GameObject:
   m_ObjectHideFlags: 0
@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a6c998779636d8499f526ec02b4d06e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _creature: {fileID: 6144372614685330839}
+  _damagableObject: {fileID: 8461052420268681917}
 --- !u!1 &6979823392237874745
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,6 +227,7 @@ GameObject:
   - component: {fileID: 6396298562498750720}
   - component: {fileID: 8167582289992438118}
   - component: {fileID: 6144372614685330839}
+  - component: {fileID: 9130006812645399252}
   - component: {fileID: 7596133155286664674}
   - component: {fileID: 8302833559099181942}
   - component: {fileID: 9123258358053521239}
@@ -342,11 +343,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7728da10b3e577f48a95aaf52f5186be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
   _axisHandler: {fileID: 7596133155286664674}
   _mover: {fileID: 8302833559099181942}
   _jumper: {fileID: 9123258358053521239}
+  _health: {fileID: 9130006812645399252}
   _animator: {fileID: 113976062142015115}
+--- !u!114 &9130006812645399252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8461052420268681917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ed629c88ed131147a24c14a21ea089e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHealth: 100
 --- !u!114 &7596133155286664674
 MonoBehaviour:
   m_ObjectHideFlags: 0

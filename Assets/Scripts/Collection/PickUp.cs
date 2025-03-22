@@ -2,10 +2,8 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class PickUp : MonoBehaviour
+public class PickUp : MonoBehaviour, ICollectible
 {
-	[Required][SerializeField] private Collectable _collectible;
-	[Space]
 	[SerializeField] private float _delayDestroy = 1;
 
 	private Animator _animator;
@@ -15,19 +13,9 @@ public class PickUp : MonoBehaviour
 		_animator = GetComponent<Animator>();
 	}
 
-	private void OnEnable()
+	public virtual void OnCollected(GameObject collector)
 	{
-		_collectible.Collected += Collect;
-	}
-
-	private void OnDisable()
-	{
-		_collectible.Collected -= Collect;
-	}
-
-	protected virtual void Collect(Creature collecter)
-	{
-		_animator.SetTrigger(CollectableAnimatorData.Params.Disappear);
+		_animator.SetTrigger(PickUpAnimatorData.Params.Disappear);
 
 		Destroy(gameObject, _delayDestroy);
 	}

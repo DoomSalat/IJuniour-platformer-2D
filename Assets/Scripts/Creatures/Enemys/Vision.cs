@@ -70,14 +70,7 @@ public class Vision : MonoBehaviour
 		Vector2 direction = _lookRight ? Vector2.right : Vector2.left;
 		RaycastHit2D hit = Physics2D.Raycast(_targetCheck.position, direction, _checkDistanceTarget, _targetLayer);
 
-		if (hit.collider != null && hit.collider.TryGetComponent<VisionTarget>(out _))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return hit.collider != null && hit.collider.TryGetComponent<VisionTarget>(out _);
 	}
 
 	public bool IsGround()

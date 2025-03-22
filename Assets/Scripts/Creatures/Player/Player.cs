@@ -9,6 +9,7 @@ public class Player : Creature
 	[Required][SerializeField] private AxisHandler _axisHandler;
 	[Required][SerializeField] private Mover _mover;
 	[Required][SerializeField] private Jumper _jumper;
+	[Required][SerializeField] private Health _health;
 	[Required][SerializeField] private BoxCreatureAnimator _animator;
 
 	private bool _canPressJump = true;
@@ -36,7 +37,7 @@ public class Player : Creature
 
 	private void Update()
 	{
-		if (Health == 0)
+		if (_health.CurrentHealth == 0)
 			return;
 
 		_axisDirection = _axisHandler.GetAxisDirection();
@@ -54,13 +55,13 @@ public class Player : Creature
 
 	private void FixedUpdate()
 	{
-		if (Health == 0)
+		if (_health.CurrentHealth == 0)
 			return;
 
 		_mover.Move(_axisDirection.x);
 		_jumper.FixedForce(_axisDirection.y > 0);
 
-		if (_rigidbody.linearVelocityY < -VelocityZeroOffset)
+		if (Rigidbody.linearVelocityY < -VelocityZeroOffset)
 		{
 			_animator.SetFall(true);
 		}
@@ -89,21 +90,5 @@ public class Player : Creature
 	private void OnJumpCanceled(InputAction.CallbackContext context)
 	{
 		_canPressJump = true;
-	}
-
-	public override void TakeDamage(int damage)
-	{
-		if (Health == 0)
-			return;
-
-		base.TakeDamage(damage);
-
-		if (Health == 0)
-		{
-			Debug.Log("Player dead");
-			_axisHandler.MainControls.Disable();
-			_rigidbody.bodyType = RigidbodyType2D.Kinematic;
-			_animator.PlayDead();
-		}
 	}
 }

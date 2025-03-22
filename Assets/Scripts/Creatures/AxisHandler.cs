@@ -21,72 +21,41 @@ public class AxisHandler : InputHandler
 		bool isLeftBoard = IsKeyPerformed(MainControls.Player.Left);
 		bool isRightBoard = IsKeyPerformed(MainControls.Player.Right);
 
-		float verticalMove = CalculateVerticalMove(isUpBoard, isDownBoard);
-		float horizontalMove = CalculateHorizontalMove(isLeftBoard, isRightBoard);
+		float verticalMove = CalculateMove(isUpBoard, isDownBoard, ref _reverseInputVertical, _savedDirection.y);
+		float horizontalMove = CalculateMove(isRightBoard, isLeftBoard, ref _reverseInputHorizontal, _savedDirection.x);
 		_savedDirection = new Vector2(horizontalMove, verticalMove);
 
 		return _savedDirection;
 	}
 
-	private float CalculateVerticalMove(bool isUpBoard, bool isDownBoard)
+	private float CalculateMove(bool isPositive, bool isNegative, ref bool reverseInput, float savedDirection)
 	{
-		float verticalMove = 0f;
+		float move = 0f;
 
-		if (isUpBoard && isDownBoard)
+		if (isPositive && isNegative)
 		{
-			verticalMove = _savedDirection.y;
+			move = savedDirection;
 
-			if (!_reverseInputVertical)
+			if (reverseInput == false)
 			{
-				_reverseInputVertical = true;
-				verticalMove *= -1;
+				reverseInput = true;
+				move *= -1;
 			}
 		}
 		else
 		{
-			_reverseInputVertical = false;
+			reverseInput = false;
 
-			if (isUpBoard)
+			if (isPositive)
 			{
-				verticalMove = 1f;
+				move = 1f;
 			}
-			else if (isDownBoard)
+			else if (isNegative)
 			{
-				verticalMove = -1f;
-			}
-		}
-
-		return verticalMove;
-	}
-
-	private float CalculateHorizontalMove(bool isLeftBoard, bool isRightBoard)
-	{
-		float horizontalMove = 0f;
-
-		if (isLeftBoard && isRightBoard)
-		{
-			horizontalMove = _savedDirection.x;
-
-			if (_reverseInputHorizontal == false)
-			{
-				_reverseInputHorizontal = true;
-				horizontalMove *= -1;
-			}
-		}
-		else
-		{
-			_reverseInputHorizontal = false;
-
-			if (isRightBoard)
-			{
-				horizontalMove = 1f;
-			}
-			else if (isLeftBoard)
-			{
-				horizontalMove = -1f;
+				move = -1f;
 			}
 		}
 
-		return horizontalMove;
+		return move;
 	}
 }

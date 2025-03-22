@@ -13,6 +13,12 @@ public class Enemy : Creature
 
 	[Header("Parameters")]
 	[SerializeField][MinValue(0)] private float _waitIdlePatrol = 2;
+	[Space]
+	[SerializeField][MinValue(0)] private float _chaseSpeedMultiplier = 2;
+	[SerializeField][MinValue(0)] private float _delayCeaseChase = 2f;
+
+	private WaitForSeconds _idlePatrolDelay;
+	private WaitForSeconds _ceaseDelay;
 
 	private Dictionary<Type, IEnemyState> _states;
 	private IEnemyState _currentState;
@@ -21,6 +27,9 @@ public class Enemy : Creature
 	{
 		base.Awake();
 		InitState();
+
+		_idlePatrolDelay = new WaitForSeconds(_waitIdlePatrol);
+		_ceaseDelay = new WaitForSeconds(_delayCeaseChase);
 	}
 
 	private void Start()
@@ -78,7 +87,7 @@ public class Enemy : Creature
 
 	private void FallAnimation()
 	{
-		if (_rigidbody.linearVelocityY < -VelocityZeroOffset)
+		if (Rigidbody.linearVelocityY < -VelocityZeroOffset)
 		{
 			_animator.SetFall(true);
 			_animator.SetGround(false);
@@ -98,10 +107,17 @@ public class Enemy : Creature
 	{
 		SetStateIdle();
 
-		yield return new WaitForSeconds(_waitIdlePatrol);
+		yield return _idlePatrolDelay;
 		yield return new WaitUntil(() => _vision.IsGround());
 
 		_vision.ReverseLook();
+		SetStatePatrol();
+	}
+
+	private IEnumerator CeaseChase()
+	{
+		yield return _ceaseDelay;
+
 		SetStatePatrol();
 	}
 
@@ -111,7 +127,7 @@ public class Enemy : Creature
 		{
 			[typeof(IdleState)] = new IdleState(_mover, _animator),
 			[typeof(PatrolState)] = new PatrolState(this, _mover, _vision, _animator),
-			[typeof(ChaseState)] = new ChaseState(this, _mover, _vision, _animator)
+			[typeof(ChaseState)] = new ChaseState(this, _mover, _vision, _animator, CeaseChase(), _chaseSpeedMultiplier)
 		};
 	}
 

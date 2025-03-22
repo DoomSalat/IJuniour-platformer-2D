@@ -3,23 +3,31 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class HitBox : MonoBehaviour
 {
-	[SerializeField] private Creature _creature;
+	[SerializeField] private GameObject _damagableObject;
+
 	private IDamagable _damagable;
 
 	private void Awake()
 	{
-		_damagable = _creature;
+		_damagableObject.TryGetComponent(out _damagable);
 	}
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		if (_damagable == null)
+			return;
+
 		if (collision.TryGetComponent<HurtBox>(out var hurtBox))
 		{
 			_damagable.TakeDamage(hurtBox.Damage);
 		}
-		else if (collision.TryGetComponent<HealBox>(out var healBox))
+	}
+
+	private void OnValidate()
+	{
+		if (_damagableObject != null && _damagableObject.TryGetComponent<IDamagable>(out _) == false)
 		{
-			_damagable.Heal(healBox.Health);
+			_damagableObject = null;
 		}
 	}
 }

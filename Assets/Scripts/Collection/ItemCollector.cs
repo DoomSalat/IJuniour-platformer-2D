@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class ItemCollector : MonoBehaviour
 {
-	[SerializeField] private Creature _collecter;
+	[SerializeField] private GameObject _collecter;
 
 	private void OnTriggerEnter2D(Collider2D collision)
 	{

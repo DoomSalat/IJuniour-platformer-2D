@@ -5,9 +5,6 @@ using UnityEngine;
 public class HurtBox : MonoBehaviour
 {
 	[SerializeField][MinValue(0)] private int _damage = 5;
-	public int Damage
-	{
-		get { return _damage; }
-		private set { _damage = value; }
-	}
+
+	public int Damage => _damage;
 }
