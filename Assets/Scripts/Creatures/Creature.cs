@@ -5,10 +5,10 @@ public class Creature : MonoBehaviour
 {
 	protected const float VelocityZeroOffset = 0.1f;
 
-	protected Rigidbody2D Rigidbody;
+	protected Rigidbody2D SelfRigidbody;
 
 	protected virtual void Awake()
 	{
-		Rigidbody = GetComponent<Rigidbody2D>();
+		SelfRigidbody = GetComponent<Rigidbody2D>();
 	}
 }

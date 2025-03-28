@@ -87,7 +87,7 @@ public class Enemy : Creature
 
 	private void FallAnimation()
 	{
-		if (Rigidbody.linearVelocityY < -VelocityZeroOffset)
+		if (SelfRigidbody.linearVelocityY < -VelocityZeroOffset)
 		{
 			_animator.SetFall(true);
 			_animator.SetGround(false);

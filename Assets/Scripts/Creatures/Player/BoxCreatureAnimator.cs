@@ -33,6 +33,9 @@ public class BoxCreatureAnimator : MonoBehaviour
 
 	public void PlayDead()
 	{
-		_animator.SetTrigger(BoxCreatureAnimatorData.Params.Dead);
+		SetGround(true);
+		SetFall(false);
+		SetRun(false);
+		_animator.Play(BoxCreatureAnimatorData.Params.Dead);
 	}
 }

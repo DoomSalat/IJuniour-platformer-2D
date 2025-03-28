@@ -1,11 +1,13 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Health : MonoBehaviour, IDamagable
 {
-	[SerializeField][MinValue(0)] private int _maxHealth = 100;
+	[SerializeField] private int _maxHealth = 100;
 
-	[ShowInInspector] private int _currentHealth;
+	private int _currentHealth;
+
+	public event System.Action<float, float> Changed;
+	public event System.Action Died;
 
 	public int CurrentHealth
 	{
@@ -23,7 +25,12 @@ public class Health : MonoBehaviour, IDamagable
 		damage = Mathf.Max(0, damage);
 		CurrentHealth -= damage;
 
-		Debug.Log(gameObject.name + " Take damage: " + damage);
+		if (CurrentHealth == 0)
+		{
+			Died?.Invoke();
+		}
+
+		Changed?.Invoke(CurrentHealth, _maxHealth);
 	}
 
 	public void Heal(int health)
@@ -31,6 +38,6 @@ public class Health : MonoBehaviour, IDamagable
 		health = Mathf.Max(0, health);
 		CurrentHealth += health;
 
-		Debug.Log(gameObject.name + " Heal: " + health);
+		Changed?.Invoke(CurrentHealth, _maxHealth);
 	}
 }

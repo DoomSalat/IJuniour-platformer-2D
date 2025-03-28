@@ -27,12 +27,16 @@ public class Player : Creature
 	{
 		_axisHandler.MainControls.Player.Jump.performed += OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled += OnJumpCanceled;
+
+		_health.Died += Dead;
 	}
 
 	private void OnDisable()
 	{
 		_axisHandler.MainControls.Player.Jump.performed -= OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled -= OnJumpCanceled;
+
+		_health.Died -= Dead;
 	}
 
 	private void Update()
@@ -61,7 +65,7 @@ public class Player : Creature
 		_mover.Move(_axisDirection.x);
 		_jumper.FixedForce(_axisDirection.y > 0);
 
-		if (Rigidbody.linearVelocityY < -VelocityZeroOffset)
+		if (SelfRigidbody.linearVelocityY < -VelocityZeroOffset)
 		{
 			_animator.SetFall(true);
 		}
@@ -79,6 +83,9 @@ public class Player : Creature
 
 	private void OnJumpPerformed(InputAction.CallbackContext context)
 	{
+		if (_health.CurrentHealth == 0)
+			return;
+
 		if (_canPressJump && _jumper.IsGround)
 		{
 			_canPressJump = false;
@@ -90,5 +97,13 @@ public class Player : Creature
 	private void OnJumpCanceled(InputAction.CallbackContext context)
 	{
 		_canPressJump = true;
+	}
+
+	[ContextMenu(nameof(Dead))]
+	private void Dead()
+	{
+		_axisHandler.MainControls.Player.Disable();
+		_axisDirection = Vector2.zero;
+		_animator.PlayDead();
 	}
 }
