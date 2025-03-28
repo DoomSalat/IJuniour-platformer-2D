@@ -125,7 +125,5 @@ public class Player : Creature
 	{
 		SelfRigidbody.bodyType = RigidbodyType2D.Kinematic;
 		SelfRigidbody.linearVelocity = Vector2.zero;
-
-		Debug.Log("Dead stop");
 	}
 }
