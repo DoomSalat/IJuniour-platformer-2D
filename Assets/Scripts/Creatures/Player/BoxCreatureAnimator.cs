@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class BoxCreatureAnimator : MonoBehaviour
 {
+	private string _stateDead = "Dead";
 	private Animator _animator;
 
 	private void Awake()
@@ -36,6 +37,8 @@ public class BoxCreatureAnimator : MonoBehaviour
 		SetGround(true);
 		SetFall(false);
 		SetRun(false);
-		_animator.Play(BoxCreatureAnimatorData.Params.Dead);
+
+		_animator.SetTrigger(BoxCreatureAnimatorData.Params.Dead);
+		_animator.Play(_stateDead);
 	}
 }

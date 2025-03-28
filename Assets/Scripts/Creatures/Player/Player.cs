@@ -78,6 +78,15 @@ public class Player : Creature
 	private void SetGround(bool isGround)
 	{
 		_isGrounded = isGround;
+
+		if (_health.CurrentHealth == 0)
+		{
+			if (_isGrounded)
+				StopBody();
+
+			return;
+		}
+
 		_animator.SetGround(_isGrounded);
 	}
 
@@ -105,5 +114,18 @@ public class Player : Creature
 		_axisHandler.MainControls.Player.Disable();
 		_axisDirection = Vector2.zero;
 		_animator.PlayDead();
+
+		if (_isGrounded)
+		{
+			StopBody();
+		}
+	}
+
+	private void StopBody()
+	{
+		SelfRigidbody.bodyType = RigidbodyType2D.Kinematic;
+		SelfRigidbody.linearVelocity = Vector2.zero;
+
+		Debug.Log("Dead stop");
 	}
 }
