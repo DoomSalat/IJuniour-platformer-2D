@@ -13,6 +13,7 @@ public class TimerAbility : MonoBehaviour, IBarChangeable
 	public event System.Action<float, float> Changed;
 
 	private float _currentValue;
+	private Coroutine _currentCoroutine;
 
 	private float CurrentValue
 	{
@@ -28,14 +29,18 @@ public class TimerAbility : MonoBehaviour, IBarChangeable
 
 	public void Activate()
 	{
-		StopAllCoroutines();
-		StartCoroutine(UpdateValue(true));
+		if (_currentCoroutine != null)
+			StopCoroutine(_currentCoroutine);
+
+		_currentCoroutine = StartCoroutine(UpdateValue(true));
 	}
 
 	public void Deactivate()
 	{
-		StopAllCoroutines();
-		StartCoroutine(UpdateValue(false));
+		if (_currentCoroutine != null)
+			StopCoroutine(_currentCoroutine);
+
+		_currentCoroutine = StartCoroutine(UpdateValue(false));
 	}
 
 	private IEnumerator UpdateValue(bool isDecreasing)

@@ -6,6 +6,8 @@ using UnityEngine.Events;
 [RequireComponent(typeof(Collider2D))]
 public class Vampirism : MonoBehaviour
 {
+	private const int MaxHitsVampire = 10;
+
 	[Required][SerializeField] private Health _healTarget;
 	[SerializeField][MinValue(0)] private int _stealHealth = 5;
 	[SerializeField][MinValue(0)] private float _stealTime = 1f;
@@ -16,6 +18,7 @@ public class Vampirism : MonoBehaviour
 
 	private Collider2D _collider;
 	private Coroutine _stealRoutine;
+	private readonly Collider2D[] _hits = new Collider2D[MaxHitsVampire];
 	private bool _isActive = false;
 
 	private void Awake()
@@ -34,6 +37,26 @@ public class Vampirism : MonoBehaviour
 		{
 			_radius = circleCollider.radius;
 		}
+	}
+
+	[System.Obsolete]
+	private void FixedUpdate()
+	{
+		if (_isActive == false || _stealRoutine != null)
+			return;
+
+		HitBox nearestEnemy = FindNearestEnemy();
+
+		if (nearestEnemy != null)
+		{
+			_stealRoutine = StartCoroutine(StealHealth(nearestEnemy));
+		}
+	}
+
+	private void OnDrawGizmosSelected()
+	{
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, _radius);
 	}
 
 	[ContextMenu(nameof(Activate))]
@@ -60,34 +83,23 @@ public class Vampirism : MonoBehaviour
 		_deactivated?.Invoke();
 	}
 
-	private void FixedUpdate()
-	{
-		if (_isActive == false || _stealRoutine != null)
-			return;
-
-		HitBox nearestEnemy = FindNearestEnemy();
-
-		if (nearestEnemy != null)
-		{
-			_stealRoutine = StartCoroutine(StealHealth(nearestEnemy));
-		}
-	}
-
+	[System.Obsolete]
 	private HitBox FindNearestEnemy()
 	{
-		Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, _radius);
+		int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, _radius, _hits);
 		HitBox nearestEnemy = null;
 		float minDistance = float.MaxValue;
 
-		foreach (Collider2D hit in hits)
+		for (int i = 0; i < hitCount; i++)
 		{
-			if (hit.TryGetComponent<HitBox>(out var hitBox) && hit.CompareTag(tag) == false)
+			if (_hits[i].TryGetComponent<HitBox>(out var hitBox) && _hits[i].CompareTag(tag) == false)
 			{
-				float distance = Vector2.Distance(transform.position, hit.transform.position);
+				Vector2 direction = (Vector2)_hits[i].transform.position - (Vector2)transform.position;
+				float sqrDistance = direction.sqrMagnitude;
 
-				if (distance < minDistance)
+				if (sqrDistance < minDistance * minDistance)
 				{
-					minDistance = distance;
+					minDistance = Mathf.Sqrt(sqrDistance);
 					nearestEnemy = hitBox;
 				}
 			}
@@ -105,12 +117,4 @@ public class Vampirism : MonoBehaviour
 
 		_stealRoutine = null;
 	}
-
-#if UNITY_EDITOR
-	private void OnDrawGizmosSelected()
-	{
-		Gizmos.color = Color.red;
-		Gizmos.DrawWireSphere(transform.position, _radius);
-	}
-#endif
 }

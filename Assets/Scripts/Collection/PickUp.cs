@@ -1,8 +1,7 @@
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class PickUp : MonoBehaviour, ICollectible
+public class PickUp : MonoBehaviour
 {
 	[SerializeField] private float _delayDestroy = 1;
 
