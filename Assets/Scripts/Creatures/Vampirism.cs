@@ -98,7 +98,6 @@ public class Vampirism : MonoBehaviour
 
 	private IEnumerator StealHealth(HitBox enemyHealth)
 	{
-		Debug.Log(enemyHealth.transform.root.name);
 		enemyHealth.TakeDamage(_stealHealth);
 		_healTarget.Heal(_stealHealth);
 
