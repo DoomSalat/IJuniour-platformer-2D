@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 5065248170260031062}
   - component: {fileID: 5786864816501242694}
   - component: {fileID: 4655223514196952698}
+  - component: {fileID: 3281425563565732216}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -159,6 +160,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7eea18965ddd254188b704a8dec0b51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _stateMachine: {fileID: 3281425563565732216}
   _mover: {fileID: 5065248170260031062}
   _vision: {fileID: 5786864816501242694}
   _animator: {fileID: 3961425130907206874}
@@ -215,6 +217,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
+--- !u!114 &3281425563565732216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4656465008082454000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76119d18bf25eba428de84e0d82ab254, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _delayCeaseChase: 2
 --- !u!1 &4819159276567110353
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +303,7 @@ GameObject:
   - component: {fileID: 8612581840555160747}
   - component: {fileID: 5874048728962877216}
   - component: {fileID: 3059457063854267467}
-  m_Layer: 7
+  m_Layer: 8
   m_Name: HitBox
   m_TagString: Enemy
   m_Icon: {fileID: 0}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Coin : PickUp
+public class Coin : Pickup
 {
 
 }

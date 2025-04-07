@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PickUpAnimatorData : MonoBehaviour
+public class PickupAnimatorData : MonoBehaviour
 {
 	public static class Params
 	{

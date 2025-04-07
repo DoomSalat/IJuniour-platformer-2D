@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class PickUp : MonoBehaviour
+public class Pickup : MonoBehaviour
 {
 	[SerializeField] private float _delayDestroy = 1;
 
@@ -14,7 +14,7 @@ public class PickUp : MonoBehaviour
 
 	public virtual void OnCollected(GameObject collector)
 	{
-		_animator.SetTrigger(PickUpAnimatorData.Params.Disappear);
+		_animator.SetTrigger(PickupAnimatorData.Params.Disappear);
 
 		Destroy(gameObject, _delayDestroy);
 	}

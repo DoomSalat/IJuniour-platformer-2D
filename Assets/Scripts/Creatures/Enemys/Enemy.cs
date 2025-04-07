@@ -7,6 +7,7 @@ using EnemyState;
 
 public class Enemy : Creature
 {
+	[Required][SerializeField] private EnemyStateMachine _stateMachine;
 	[Required][SerializeField] private Mover _mover;
 	[Required][SerializeField] private Vision _vision;
 	[Required][SerializeField] private BoxCreatureAnimator _animator;
@@ -20,13 +21,12 @@ public class Enemy : Creature
 	private WaitForSeconds _idlePatrolDelay;
 	private WaitForSeconds _ceaseDelay;
 
-	private Dictionary<Type, IEnemyState> _states;
-	private IEnemyState _currentState;
+	private Coroutine _ceaseRoutine;
 
 	protected override void Awake()
 	{
 		base.Awake();
-		InitState();
+		_stateMachine.InitState(this, _mover, _vision, _animator, _chaseSpeedMultiplier);
 
 		_idlePatrolDelay = new WaitForSeconds(_waitIdlePatrol);
 		_ceaseDelay = new WaitForSeconds(_delayCeaseChase);
@@ -34,55 +34,51 @@ public class Enemy : Creature
 
 	private void Start()
 	{
-		SetStateByDefault();
+		_stateMachine.SetStateByDefault();
 	}
 
 	private void Update()
 	{
-		_currentState?.Update();
+		_stateMachine.CurrentState?.Update();
 	}
 
 	private void FixedUpdate()
 	{
-		_currentState?.FixedUpdate();
+		_stateMachine.CurrentState?.FixedUpdate();
 
-		if (_currentState != GetState<ChaseState>() && _vision.IsTargetBelow())
+		if (_stateMachine.CurrentState != _stateMachine.GetState<ChaseState>() && _vision.IsTargetBelow())
 		{
-			SetStateChase();
+			_stateMachine.SetStateChase();
 		}
 
 		FallAnimation();
 	}
 
-	public IEnemyState GetState<T>() where T : IEnemyState
-	{
-		var type = typeof(T);
-		return _states[type];
-	}
-
-	public void SetStateByDefault()
-	{
-		SetStatePatrol();
-	}
-
-	public void SetStateIdle()
-	{
-		SetState(GetState<IdleState>());
-	}
-
-	public void SetStatePatrol()
-	{
-		SetState(GetState<PatrolState>());
-	}
-
-	public void SetStateChase()
-	{
-		SetState(GetState<ChaseState>());
-	}
-
 	public void StartWaitTurn()
 	{
 		StartCoroutine(WaitIdleTurn());
+	}
+
+	public void LookTarget()
+	{
+		if (_vision.IsTargetBelow() == false && _ceaseRoutine == null)
+		{
+			_ceaseRoutine = StartCoroutine(CeaseChase());
+		}
+		else if (_vision.IsTargetBelow() && _ceaseRoutine != null)
+		{
+			StopCoroutine(_ceaseRoutine);
+			_ceaseRoutine = null;
+		}
+	}
+
+	public void DeactiveLookTarget()
+	{
+		if (_ceaseRoutine != null)
+		{
+			StopCoroutine(_ceaseRoutine);
+			_ceaseRoutine = null;
+		}
 	}
 
 	private void FallAnimation()
@@ -105,39 +101,19 @@ public class Enemy : Creature
 
 	private IEnumerator WaitIdleTurn()
 	{
-		SetStateIdle();
+		_stateMachine.SetStateIdle();
 
 		yield return _idlePatrolDelay;
 		yield return new WaitUntil(() => _vision.IsGround());
 
 		_vision.ReverseLook();
-		SetStatePatrol();
+		_stateMachine.SetStatePatrol();
 	}
 
 	private IEnumerator CeaseChase()
 	{
 		yield return _ceaseDelay;
 
-		SetStatePatrol();
-	}
-
-	private void InitState()
-	{
-		_states = new Dictionary<Type, IEnemyState>
-		{
-			[typeof(IdleState)] = new IdleState(_mover, _animator),
-			[typeof(PatrolState)] = new PatrolState(this, _mover, _vision, _animator),
-			[typeof(ChaseState)] = new ChaseState(this, _mover, _vision, _animator, CeaseChase(), _chaseSpeedMultiplier)
-		};
-	}
-
-	private void SetState(IEnemyState newState)
-	{
-		if (_currentState != newState)
-		{
-			_currentState?.Exit();
-			_currentState = newState;
-			_currentState.Enter();
-		}
+		_stateMachine.SetStatePatrol();
 	}
 }

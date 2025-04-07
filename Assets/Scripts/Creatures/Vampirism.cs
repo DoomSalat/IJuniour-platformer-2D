@@ -3,7 +3,6 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Collider2D))]
 public class Vampirism : MonoBehaviour
 {
 	private const int MaxHitsVampire = 10;
@@ -12,18 +11,20 @@ public class Vampirism : MonoBehaviour
 	[SerializeField][MinValue(0)] private int _stealHealth = 5;
 	[SerializeField][MinValue(0)] private float _stealTime = 1f;
 	[SerializeField][MinValue(0)] private float _radius = 2f;
+	[SerializeField] private LayerMask _enemyLayerMask;
 	[Space]
 	public UnityEvent _activeted;
 	public UnityEvent _deactivated;
 
-	private Collider2D _collider;
-	private Coroutine _stealRoutine;
+	private IHeallable _heallableTarget;
+
 	private readonly Collider2D[] _hits = new Collider2D[MaxHitsVampire];
+	private Coroutine _stealRoutine;
 	private bool _isActive = false;
 
 	private void Awake()
 	{
-		_collider = GetComponent<Collider2D>();
+		_healTarget.TryGetComponent(out _heallableTarget);
 	}
 
 	private void Start()
@@ -36,6 +37,11 @@ public class Vampirism : MonoBehaviour
 		if (TryGetComponent<CircleCollider2D>(out var circleCollider))
 		{
 			_radius = circleCollider.radius;
+		}
+
+		if (_healTarget != null && _healTarget.TryGetComponent<IHeallable>(out _) == false)
+		{
+			_healTarget = null;
 		}
 	}
 
@@ -62,7 +68,6 @@ public class Vampirism : MonoBehaviour
 	[ContextMenu(nameof(Activate))]
 	public void Activate()
 	{
-		_collider.enabled = true;
 		_isActive = true;
 
 		_activeted?.Invoke();
@@ -71,7 +76,6 @@ public class Vampirism : MonoBehaviour
 	[ContextMenu(nameof(Deactivate))]
 	public void Deactivate()
 	{
-		_collider.enabled = false;
 		_isActive = false;
 
 		if (_stealRoutine != null)
@@ -86,13 +90,13 @@ public class Vampirism : MonoBehaviour
 	[System.Obsolete]
 	private HitBox FindNearestEnemy()
 	{
-		int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, _radius, _hits);
+		int hitCount = Physics2D.OverlapCircleNonAlloc(transform.position, _radius, _hits, _enemyLayerMask);
 		HitBox nearestEnemy = null;
 		float minDistance = float.MaxValue;
 
 		for (int i = 0; i < hitCount; i++)
 		{
-			if (_hits[i].TryGetComponent<HitBox>(out var hitBox) && _hits[i].CompareTag(tag) == false)
+			if (_hits[i].TryGetComponent<HitBox>(out var hitBox))
 			{
 				Vector2 direction = (Vector2)_hits[i].transform.position - (Vector2)transform.position;
 				float sqrDistance = direction.sqrMagnitude;
@@ -111,7 +115,7 @@ public class Vampirism : MonoBehaviour
 	private IEnumerator StealHealth(HitBox enemyHealth)
 	{
 		enemyHealth.TakeDamage(_stealHealth);
-		_healTarget.Heal(_stealHealth);
+		_heallableTarget.Heal(_stealHealth);
 
 		yield return new WaitForSeconds(_stealTime);
 

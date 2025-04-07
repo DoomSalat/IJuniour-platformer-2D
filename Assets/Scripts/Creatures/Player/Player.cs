@@ -48,7 +48,7 @@ public class Player : Creature
 
 	private void Update()
 	{
-		if (_health.CurrentHealth == 0)
+		if (_health.CurrentValue == 0)
 			return;
 
 		_axisDirection = _axisHandler.GetAxisDirection();
@@ -66,7 +66,7 @@ public class Player : Creature
 
 	private void FixedUpdate()
 	{
-		if (_health.CurrentHealth == 0)
+		if (_health.CurrentValue == 0)
 			return;
 
 		_mover.Move(_axisDirection.x);
@@ -86,7 +86,7 @@ public class Player : Creature
 	{
 		_isGrounded = isGround;
 
-		if (_health.CurrentHealth == 0)
+		if (_health.CurrentValue == 0)
 		{
 			if (_isGrounded)
 				StopBody();
@@ -99,7 +99,7 @@ public class Player : Creature
 
 	private void OnJumpPerformed(InputAction.CallbackContext context)
 	{
-		if (_health.CurrentHealth == 0)
+		if (_health.CurrentValue == 0)
 			return;
 
 		if (_canPressJump && _jumper.IsGround)

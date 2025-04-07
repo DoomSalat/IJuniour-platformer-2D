@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Collectable : MonoBehaviour
 {
-	[SerializeField] private PickUp _pickUp;
+	[SerializeField] private Pickup _pickUp;
 
 	private Collider2D _collider;
 

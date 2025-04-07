@@ -12,19 +12,15 @@ namespace EnemyState
 		private Mover _mover;
 		private Vision _vision;
 		private BoxCreatureAnimator _animator;
-		private IEnumerator _chaseCoroutine;
-
-		private Coroutine _ceaseRoutine;
 
 		private float _chaseSpeedMultiplier;
 
-		public ChaseState(Enemy enemy, Mover mover, Vision vision, BoxCreatureAnimator animator, IEnumerator chaseCoroutine, float chaseMultiplier)
+		public ChaseState(Enemy enemy, Mover mover, Vision vision, BoxCreatureAnimator animator, float chaseMultiplier)
 		{
 			_enemy = enemy;
 			_mover = mover;
 			_vision = vision;
 			_animator = animator;
-			_chaseCoroutine = chaseCoroutine;
 
 			_chaseSpeedMultiplier = chaseMultiplier;
 		}
@@ -41,7 +37,7 @@ namespace EnemyState
 		{
 			_mover.Move(_vision.LookRight ? RightDirection : LeftDirection, _chaseSpeedMultiplier);
 
-			LookTarget();
+			_enemy.LookTarget();
 
 			if (_vision.HasObstacleInFront())
 			{
@@ -51,24 +47,7 @@ namespace EnemyState
 
 		public void Exit()
 		{
-			if (_ceaseRoutine != null)
-			{
-				_enemy.StopCoroutine(_ceaseRoutine);
-				_ceaseRoutine = null;
-			}
-		}
-
-		private void LookTarget()
-		{
-			if (_vision.IsTargetBelow() == false && _ceaseRoutine == null)
-			{
-				_ceaseRoutine = _enemy.StartCoroutine(_chaseCoroutine);
-			}
-			else if (_vision.IsTargetBelow() && _ceaseRoutine != null)
-			{
-				_enemy.StopCoroutine(_ceaseRoutine);
-				_ceaseRoutine = null;
-			}
+			_enemy.DeactiveLookTarget();
 		}
 	}
 }

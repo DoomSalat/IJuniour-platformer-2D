@@ -1,44 +1,44 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour, IDamagable, IBarChangeable
+public class Health : MonoBehaviour, IDamagable, IHeallable, IBarChangeable
 {
-	[SerializeField] private int _maxHealth = 100;
+	[SerializeField] private int _maxValue = 100;
 
-	private int _currentHealth;
+	private int _currentValue;
 
 	public event System.Action<float, float> Changed;
 	public event System.Action Died;
 
-	public int CurrentHealth
+	public int CurrentValue
 	{
-		get => _currentHealth;
-		set => _currentHealth = Mathf.Clamp(value, 0, _maxHealth);
+		get => _currentValue;
+		set => _currentValue = Mathf.Clamp(value, 0, _maxValue);
 	}
 
 	private void Awake()
 	{
-		_currentHealth = _maxHealth;
+		_currentValue = _maxValue;
 	}
 
 	public void TakeDamage(int damage)
 	{
 		damage = Mathf.Max(0, damage);
-		CurrentHealth -= damage;
+		CurrentValue -= damage;
 
-		if (CurrentHealth == 0)
+		if (CurrentValue == 0)
 		{
 			Died?.Invoke();
 		}
 
-		Changed?.Invoke(CurrentHealth, _maxHealth);
+		Changed?.Invoke(CurrentValue, _maxValue);
 	}
 
 	public void Heal(int health)
 	{
 		health = Mathf.Max(0, health);
-		CurrentHealth += health;
+		CurrentValue += health;
 
-		TriggerChange(CurrentHealth, _maxHealth);
+		TriggerChange(CurrentValue, _maxValue);
 	}
 
 	public void TriggerChange(float currentValue, float maxValue)
