@@ -143,6 +143,15 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": ""Press"",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Vampirism"",
+                    ""type"": ""Button"",
+                    ""id"": ""6e6e32a9-c61e-48a7-ac27-f5f454d62cef"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": ""Press"",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -539,6 +548,17 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""21366b35-d942-49b6-b77a-dd5edb591924"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Vampirism"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1139,6 +1159,7 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
         m_Player_Down = m_Player.FindAction("Down", throwIfNotFound: true);
         m_Player_Left = m_Player.FindAction("Left", throwIfNotFound: true);
         m_Player_Right = m_Player.FindAction("Right", throwIfNotFound: true);
+        m_Player_Vampirism = m_Player.FindAction("Vampirism", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -1231,6 +1252,7 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Down;
     private readonly InputAction m_Player_Left;
     private readonly InputAction m_Player_Right;
+    private readonly InputAction m_Player_Vampirism;
     public struct PlayerActions
     {
         private @MainControls m_Wrapper;
@@ -1248,6 +1270,7 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
         public InputAction @Down => m_Wrapper.m_Player_Down;
         public InputAction @Left => m_Wrapper.m_Player_Left;
         public InputAction @Right => m_Wrapper.m_Player_Right;
+        public InputAction @Vampirism => m_Wrapper.m_Player_Vampirism;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1296,6 +1319,9 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
             @Right.started += instance.OnRight;
             @Right.performed += instance.OnRight;
             @Right.canceled += instance.OnRight;
+            @Vampirism.started += instance.OnVampirism;
+            @Vampirism.performed += instance.OnVampirism;
+            @Vampirism.canceled += instance.OnVampirism;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1339,6 +1365,9 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
             @Right.started -= instance.OnRight;
             @Right.performed -= instance.OnRight;
             @Right.canceled -= instance.OnRight;
+            @Vampirism.started -= instance.OnVampirism;
+            @Vampirism.performed -= instance.OnVampirism;
+            @Vampirism.canceled -= instance.OnVampirism;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1534,6 +1563,7 @@ public partial class @MainControls: IInputActionCollection2, IDisposable
         void OnDown(InputAction.CallbackContext context);
         void OnLeft(InputAction.CallbackContext context);
         void OnRight(InputAction.CallbackContext context);
+        void OnVampirism(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

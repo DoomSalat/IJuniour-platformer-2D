@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public abstract class HealthBar : MonoBehaviour
+public abstract class HealthBar : SliderBar
 {
 	[SerializeField] private Health _health;
 
@@ -13,14 +13,4 @@ public abstract class HealthBar : MonoBehaviour
 	{
 		_health.Changed -= Change;
 	}
-
-	protected float GetNormalizedFactor(float value, float maxValue)
-	{
-		if (maxValue == 0f)
-			return 0f;
-
-		return value / maxValue;
-	}
-
-	protected abstract void Change(float value, float maxValue);
 }

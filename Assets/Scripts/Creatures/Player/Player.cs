@@ -11,6 +11,9 @@ public class Player : Creature
 	[Required][SerializeField] private Jumper _jumper;
 	[Required][SerializeField] private Health _health;
 	[Required][SerializeField] private BoxCreatureAnimator _animator;
+	[Space]
+	[Required][SerializeField] private Vampirism _vampirism;
+	[Required][SerializeField] private TimerAbility _vampirismTimer;
 
 	private bool _canPressJump = true;
 	private bool _isGrounded;
@@ -27,16 +30,24 @@ public class Player : Creature
 	{
 		_axisHandler.MainControls.Player.Jump.performed += OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled += OnJumpCanceled;
+		_axisHandler.MainControls.Player.Vampirism.performed += OnVampirismActive;
+		_axisHandler.MainControls.Player.Vampirism.canceled += OnVampirismDeactive;
 
 		_health.Died += Dead;
+		_vampirismTimer.TimerEnded += DeactiveVampirism;
 	}
 
 	private void OnDisable()
 	{
 		_axisHandler.MainControls.Player.Jump.performed -= OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled -= OnJumpCanceled;
+		_axisHandler.MainControls.Player.Vampirism.performed -= OnVampirismActive;
+		_axisHandler.MainControls.Player.Vampirism.canceled -= OnVampirismDeactive;
 
 		_health.Died -= Dead;
+		_vampirismTimer.TimerEnded -= DeactiveVampirism;
+
+		_vampirismTimer.Deactivate();
 	}
 
 	private void Update()
@@ -106,6 +117,23 @@ public class Player : Creature
 	private void OnJumpCanceled(InputAction.CallbackContext context)
 	{
 		_canPressJump = true;
+	}
+
+	private void OnVampirismActive(InputAction.CallbackContext context)
+	{
+		_vampirism.Activate();
+		_vampirismTimer.Activate();
+	}
+
+	private void OnVampirismDeactive(InputAction.CallbackContext context)
+	{
+		DeactiveVampirism();
+	}
+
+	private void DeactiveVampirism()
+	{
+		_vampirism.Deactivate();
+		_vampirismTimer.Deactivate();
 	}
 
 	[ContextMenu(nameof(Dead))]

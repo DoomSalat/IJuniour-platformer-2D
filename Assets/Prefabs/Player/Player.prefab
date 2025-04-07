@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6755956550494923967}
   m_Layer: 6
   m_Name: Collector
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 9141226459386969436}
   m_Layer: 7
   m_Name: HitBox
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 1630000880935019903}
   m_Layer: 0
   m_Name: Grounded
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -440,6 +440,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas Health bar
       objectReference: {fileID: 0}
+    - target: {fileID: 4515608105484468098, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
+      propertyPath: m_TagString
+      value: Player
+      objectReference: {fileID: 0}
     - target: {fileID: 5875844641925282687, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -593,6 +597,10 @@ PrefabInstance:
     - target: {fileID: 7653477441443992660, guid: 54973def09ab8ea42ad52831e4e14777, type: 3}
       propertyPath: m_Name
       value: Character
+      objectReference: {fileID: 0}
+    - target: {fileID: 7653477441443992660, guid: 54973def09ab8ea42ad52831e4e14777, type: 3}
+      propertyPath: m_TagString
+      value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8179150479453645772, guid: 54973def09ab8ea42ad52831e4e14777, type: 3}
       propertyPath: _targetRigidbody

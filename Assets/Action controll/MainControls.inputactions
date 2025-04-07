@@ -121,6 +121,15 @@
                     "processors": "",
                     "interactions": "Press",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Vampirism",
+                    "type": "Button",
+                    "id": "6e6e32a9-c61e-48a7-ac27-f5f454d62cef",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "Press",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -517,6 +526,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "21366b35-d942-49b6-b77a-dd5edb591924",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Vampirism",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

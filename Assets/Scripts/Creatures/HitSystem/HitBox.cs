@@ -12,14 +12,24 @@ public class HitBox : MonoBehaviour
 		_damagableObject.TryGetComponent(out _damagable);
 	}
 
+	public void TakeDamage(int damage)
+	{
+		_damagable.TakeDamage(damage);
+	}
+
+	public void Heal(int value)
+	{
+		_damagable.Heal(value);
+	}
+
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
 		if (_damagable == null)
 			return;
 
-		if (collision.TryGetComponent<HurtBox>(out var hurtBox))
+		if (collision.TryGetComponent<HurtBox>(out var hurtBox) && hurtBox.CompareTag(tag) == false)
 		{
-			_damagable.TakeDamage(hurtBox.Damage);
+			TakeDamage(hurtBox.Damage);
 		}
 	}
 

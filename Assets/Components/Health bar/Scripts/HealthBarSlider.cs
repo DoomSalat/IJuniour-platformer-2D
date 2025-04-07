@@ -6,12 +6,10 @@ public class HealthBarSlider : HealthBar
 {
 	private const float MaxViewNumber = 1;
 
-	private Slider _slider;
-
 	private void Awake()
 	{
-		_slider = GetComponent<Slider>();
-		_slider.maxValue = MaxViewNumber;
+		Slider = GetComponent<Slider>();
+		Slider.maxValue = MaxViewNumber;
 	}
 
 	protected override void Change(float value, float maxValue)
@@ -19,6 +17,6 @@ public class HealthBarSlider : HealthBar
 		if (maxValue <= 0)
 			return;
 
-		_slider.value = GetNormalizedFactor(value, maxValue);
+		Slider.value = GetNormalizedFactor(value, maxValue);
 	}
 }
