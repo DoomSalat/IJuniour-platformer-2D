@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Health : MonoBehaviour, IDamagable
+public class Health : MonoBehaviour, IDamagable, IBarChangeable
 {
 	[SerializeField] private int _maxHealth = 100;
 
@@ -38,6 +38,11 @@ public class Health : MonoBehaviour, IDamagable
 		health = Mathf.Max(0, health);
 		CurrentHealth += health;
 
-		Changed?.Invoke(CurrentHealth, _maxHealth);
+		TriggerChange(CurrentHealth, _maxHealth);
+	}
+
+	public void TriggerChange(float currentValue, float maxValue)
+	{
+		Changed?.Invoke(currentValue, maxValue);
 	}
 }

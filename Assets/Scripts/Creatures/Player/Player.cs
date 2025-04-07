@@ -31,7 +31,6 @@ public class Player : Creature
 		_axisHandler.MainControls.Player.Jump.performed += OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled += OnJumpCanceled;
 		_axisHandler.MainControls.Player.Vampirism.performed += OnVampirismActive;
-		_axisHandler.MainControls.Player.Vampirism.canceled += OnVampirismDeactive;
 
 		_health.Died += Dead;
 		_vampirismTimer.TimerEnded += DeactiveVampirism;
@@ -42,12 +41,9 @@ public class Player : Creature
 		_axisHandler.MainControls.Player.Jump.performed -= OnJumpPerformed;
 		_axisHandler.MainControls.Player.Jump.canceled -= OnJumpCanceled;
 		_axisHandler.MainControls.Player.Vampirism.performed -= OnVampirismActive;
-		_axisHandler.MainControls.Player.Vampirism.canceled -= OnVampirismDeactive;
 
 		_health.Died -= Dead;
 		_vampirismTimer.TimerEnded -= DeactiveVampirism;
-
-		_vampirismTimer.Deactivate();
 	}
 
 	private void Update()
@@ -123,11 +119,6 @@ public class Player : Creature
 	{
 		_vampirism.Activate();
 		_vampirismTimer.Activate();
-	}
-
-	private void OnVampirismDeactive(InputAction.CallbackContext context)
-	{
-		DeactiveVampirism();
 	}
 
 	private void DeactiveVampirism()

@@ -2,81 +2,69 @@ using System.Collections;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class TimerAbility : MonoBehaviour
+public class TimerAbility : MonoBehaviour, IBarChangeable
 {
-	private const float Second = 1;
+	private const float Max = 1f;
 
-	[SerializeField][MinValue(0)] private int _maxValue = 10;
-	[SerializeField][MinValue(0)] private int _loseActive = 2;
-	[SerializeField][MinValue(0)] private int _getDeactive = 1;
+	[SerializeField][MinValue(0)] private float _timeToDecrease = 5f;
+	[SerializeField][MinValue(0)] private float _timeToIncrease = 3f;
 
 	public event System.Action TimerEnded;
 	public event System.Action<float, float> Changed;
 
-	private int _currentValue;
+	private float _currentValue;
 
-	public int CurrentValue
+	private float CurrentValue
 	{
 		get => _currentValue;
-		set => _currentValue = Mathf.Clamp(value, 0, _maxValue);
+		set => _currentValue = Mathf.Clamp(value, 0f, Max);
 	}
 
 	private void Start()
 	{
-		CurrentValue = _maxValue;
+		CurrentValue = Max;
 		Deactivate();
 	}
 
 	public void Activate()
 	{
 		StopAllCoroutines();
-		StartCoroutine(LoseValue());
+		StartCoroutine(UpdateValue(true));
 	}
 
 	public void Deactivate()
 	{
 		StopAllCoroutines();
-		StartCoroutine(MakeUpValue());
+		StartCoroutine(UpdateValue(false));
 	}
 
-	private IEnumerator MakeUpValue()
+	private IEnumerator UpdateValue(bool isDecreasing)
 	{
-		var waitSecond = new WaitForSeconds(Second);
+		float elapsedTime = 0f;
+		float startValue = _currentValue;
+		float targetValue = isDecreasing ? 0f : Max;
+		float duration = isDecreasing ? _timeToDecrease : _timeToIncrease;
 
-		bool isWork = true;
-
-		while (isWork)
+		while (elapsedTime < duration)
 		{
-			CurrentValue += _getDeactive;
-			Changed?.Invoke(CurrentValue, _maxValue);
+			elapsedTime += Time.deltaTime;
+			CurrentValue = Mathf.Lerp(startValue, targetValue, elapsedTime / duration);
+			Changed?.Invoke(CurrentValue, Max);
 
-			if (_currentValue == _maxValue)
-			{
-				break;
-			}
+			yield return null;
+		}
 
-			yield return waitSecond;
+		CurrentValue = targetValue;
+		TriggerChange(CurrentValue, Max);
+
+		if (isDecreasing && CurrentValue <= 0f)
+		{
+			TimerEnded?.Invoke();
 		}
 	}
 
-	private IEnumerator LoseValue()
+	public void TriggerChange(float currentValue, float maxValue)
 	{
-		var waitSecond = new WaitForSeconds(Second);
-
-		bool isWork = true;
-
-		while (isWork)
-		{
-			CurrentValue -= _loseActive;
-			Changed?.Invoke(CurrentValue, _maxValue);
-
-			if (_currentValue == 0)
-			{
-				TimerEnded?.Invoke();
-				break;
-			}
-
-			yield return waitSecond;
-		}
+		Changed?.Invoke(currentValue, maxValue);
 	}
 }

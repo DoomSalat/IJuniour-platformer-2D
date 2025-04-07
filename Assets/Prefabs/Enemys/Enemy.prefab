@@ -561,10 +561,18 @@ PrefabInstance:
       propertyPath: _health
       value: 
       objectReference: {fileID: 4655223514196952698}
+    - target: {fileID: 164360736947662395, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
+      propertyPath: _changable
+      value: 
+      objectReference: {fileID: 4656465008082454000}
     - target: {fileID: 2945419000660152748, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
       propertyPath: _health
       value: 
       objectReference: {fileID: 4655223514196952698}
+    - target: {fileID: 2945419000660152748, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
+      propertyPath: _changable
+      value: 
+      objectReference: {fileID: 4656465008082454000}
     - target: {fileID: 4515608105484468098, guid: 55cc337d30dc53344b78e917bae284f9, type: 3}
       propertyPath: m_Name
       value: Canvas Health bar
